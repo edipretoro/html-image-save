@@ -3,9 +3,18 @@ package HTML::Image::Save;
 use warnings;
 use strict;
 
+use base qw( Class::Accessor::Fast Class::ErrorHandler );
+__PACKAGE__->mk_accessors(qw(
+    output_html
+    html
+    output_dir
+    img_dir
+));
+
+
 =head1 NAME
 
-HTML::Image::Save - The great new HTML::Image::Save!
+HTML::Image::Save - Extract and save images from a HTML file
 
 =head1 VERSION
 
@@ -18,34 +27,54 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
+Extract and save images from a HTML file
 
     use HTML::Image::Save;
+    use LWP::Simple;
 
-    my $foo = HTML::Image::Save->new();
-    ...
+    my $html = get('http://en.wikipedia.org/wiki/Web_Scraping');
+    my $img_saver = HTML::Image::Save->new();
+    $img_saver->html( $html );
+    $img_saver->output_html( 'web_scraping.html' );
+    $img_saver->output_dir( './' );
+    $img_saver->img_dir( 'images' );
+    $img_saver->save();
 
-=head1 EXPORT
+    # or
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+    my $img_saver = HTML::Image::Save->new(
+       output_dir => './',
+       img_dir => 'images',
+    );
+    $img_saver->html( $html );
+    $img_saver->output_html( 'web_scraping.html' );
+    $img_saver->save();
+
+    # so, the final HTML will be stored in './web_scraping.html' and images will be saved under './images/'
 
 =head1 FUNCTIONS
 
-=head2 function1
+=head2 new
 
 =cut
 
-sub function1 {
+sub new {
+    my ($class, %args) = @_;
+    
+    my $self = {
+        img_dir => $args{img_dir} || 'images',
+        output_dir => $args{output_dir} || './',
+    };
+    
+    bless $self, $class;
+    return $self;
 }
 
-=head2 function2
+=head2 save
 
 =cut
 
-sub function2 {
+sub save {
 }
 
 =head1 AUTHOR
