@@ -18,6 +18,7 @@ use HTML::ResolveLink;
 use Carp;
 use File::Spec;
 use File::Basename;
+use File::Path;
 
 =head1 NAME
 
@@ -69,6 +70,7 @@ sub new {
     my ($class, %args) = @_;
 
     my $self = {
+        base_url => $args{base_url} || undef,
         img_dir => $args{img_dir} || 'images',
         output_dir => $args{output_dir} || './',
     };
@@ -95,6 +97,8 @@ sub save {
 
     my $tree = HTML::TreeBuilder->new_from_content( $html );
     my @img = $tree->find('img');
+
+    $self->_build_directories();
     
     foreach my $image (@img) {
         my $remote_link = $image->attr('src');
@@ -111,7 +115,14 @@ sub _get_local_link {
     my ($self, $remote_link) = @_;
     
     my $filename = basename($remote_link);
-    return File::Spec::catfile($self->output_dir, $self->img_dir, $filename);
+    return File::Spec->catfile($self->output_dir, $self->img_dir, $filename);
+}
+
+sub _build_directories {
+    my $self = shift;
+    
+    my $dir = File::Spec->catfile($self->output_dir, $self->img_dir);
+    mkpath( $dir ) if not -e $dir;
 }
 
 =head1 AUTHOR
