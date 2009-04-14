@@ -11,6 +11,8 @@ __PACKAGE__->mk_accessors(qw(
     img_dir
 ));
 
+use HTML::TreeBuilder;
+use LWP::Simple;
 
 =head1 NAME
 
