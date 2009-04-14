@@ -16,6 +16,8 @@ use HTML::TreeBuilder;
 use LWP::Simple;
 use HTML::ResolveLink;
 use Carp;
+use File::Spec;
+use File::Basename;
 
 =head1 NAME
 
@@ -80,6 +82,36 @@ sub new {
 =cut
 
 sub save {
+    my $self = shift;
+
+    croak "No base URL" unless $self->base_url;
+    croak "No HTML" unless $self->html;
+    
+    my $resolver = HTML::ResolveLink->new(
+        base => $self->base_url
+    );
+    
+    my $html = $resolver->resolve($self->html);
+
+    my $tree = HTML::TreeBuilder->new_from_content( $html );
+    my @img = $tree->find('img');
+    
+    foreach my $image (@img) {
+        my $remote_link = $image->attr('src');
+        my $local_link = $self->_get_local_link($remote_link);
+        getstore($remote_link, $local_link);
+        $image->attr('src', $local_link);
+    }
+
+    return $self->html($tree->as_HTML());
+    
+}
+
+sub _get_local_link {
+    my ($self, $remote_link) = @_;
+    
+    my $filename = basename($remote_link);
+    return File::Spec::catfile($self->output_dir, $self->img_dir, $filename);
 }
 
 =head1 AUTHOR
