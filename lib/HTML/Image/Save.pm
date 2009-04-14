@@ -15,6 +15,7 @@ __PACKAGE__->mk_accessors(qw(
 use HTML::TreeBuilder;
 use LWP::Simple;
 use HTML::ResolveLink;
+use Carp;
 
 =head1 NAME
 
@@ -64,7 +65,7 @@ Extract and save images from a HTML file
 
 sub new {
     my ($class, %args) = @_;
-    
+
     my $self = {
         img_dir => $args{img_dir} || 'images',
         output_dir => $args{output_dir} || './',
