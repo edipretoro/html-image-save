@@ -13,6 +13,10 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'Test::More' => 0,
+        'Class::Accessor::Fast' => 0,
+        'Class::ErrorHandler' => 0,
+        'HTML::TreeBuilder' => 0,
+        'LWP::Simple' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'HTML-Image-Save-*' },
