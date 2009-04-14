@@ -17,6 +17,7 @@ WriteMakefile(
         'Class::ErrorHandler' => 0,
         'HTML::TreeBuilder' => 0,
         'LWP::Simple' => 0,
+        'HTML::ResolveLink' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'HTML-Image-Save-*' },
