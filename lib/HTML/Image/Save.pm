@@ -5,6 +5,7 @@ use strict;
 
 use base qw( Class::Accessor::Fast Class::ErrorHandler );
 __PACKAGE__->mk_accessors(qw(
+    base_url
     output_html
     html
     output_dir
@@ -13,6 +14,7 @@ __PACKAGE__->mk_accessors(qw(
 
 use HTML::TreeBuilder;
 use LWP::Simple;
+use HTML::ResolveLink;
 
 =head1 NAME
 
