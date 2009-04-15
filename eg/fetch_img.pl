@@ -20,5 +20,6 @@ my $img_saver = HTML::Image::Save->new(
 );
 
 $img_saver->html( $html );
-write_file(basename( $uri ) || 'index.html', $img_saver->save());
+$html = $img_saver->save();
+write_file(basename( $uri ) || 'index.html', $html);
 
