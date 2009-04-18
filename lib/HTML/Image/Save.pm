@@ -107,7 +107,15 @@ sub save {
         $image->attr('src', $local_link);
     }
 
-    return $self->html($tree->as_HTML());
+    $self->html($tree->as_HTML());
+
+    if ($self->output_file()) {
+        open my $fh, '>', $self->output_file;
+        print $self->html();
+        close $fh;
+    }
+
+    return $self->html();
     
 }
 
