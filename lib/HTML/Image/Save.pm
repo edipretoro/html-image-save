@@ -109,8 +109,8 @@ sub save {
 
     $self->html($tree->as_HTML());
 
-    if ($self->output_file()) {
-        open my $fh, '>', $self->output_file;
+    if ($self->output_html()) {
+        open my $fh, '>', $self->output_html;
         print $self->html();
         close $fh;
     }
