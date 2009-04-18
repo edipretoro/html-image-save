@@ -10,6 +10,7 @@ __PACKAGE__->mk_accessors(qw(
     html
     output_dir
     img_dir
+    callback
 ));
 
 use HTML::TreeBuilder;
@@ -73,6 +74,7 @@ sub new {
         base_url => $args{base_url} || undef,
         img_dir => $args{img_dir} || 'images',
         output_dir => $args{output_dir} || './',
+        callback => $args{callback} || undef,
     };
     
     bless $self, $class;
@@ -105,6 +107,9 @@ sub save {
         my $local_link = $self->_get_local_link($remote_link);
         getstore($remote_link, $local_link);
         $image->attr('src', $local_link);
+        if ($self->callback) {
+            $self->callback->($self, $image, $local_link);
+        }
     }
 
     $self->html($tree->as_HTML());
