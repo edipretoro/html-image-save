@@ -111,7 +111,7 @@ sub save {
 
     if ($self->output_html()) {
         open my $fh, '>', $self->output_html;
-        print $self->html();
+        print $fh $self->html();
         close $fh;
     }
 
